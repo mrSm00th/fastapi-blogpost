@@ -35,9 +35,10 @@ class User(Base):
     @property
     def image_path(self) -> str:
         if self.image_file:
-            return f"https://{settings.s3_bucket_name}.s3.{settings.s3_region}.amazonaws.com/profile_pics/{self.image_file}"
+            #  return f"https://{settings.s3_bucket_name}.s3.{settings.s3_region}.amazonaws.com/profile_pics/{self.image_file}"
+            # return f"https://{settings.s3_bucket_name}.s3.{settings.s3_region}.backblazeb2.com/profile_pics/{self.image_file}"
+            return f"https://f004.backblazeb2.com/file/{settings.s3_bucket_name}/profile_pics/{self.image_file}"
         return "/static/profile_pics/default.jpg"
-
 
 class Post(Base):
     __tablename__ = "posts"
