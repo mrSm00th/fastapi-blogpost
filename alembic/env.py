@@ -1,4 +1,5 @@
 import asyncio
+
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 import asyncio
@@ -8,11 +9,11 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+import app.db.models  # Import models to ensure they are registered with SQLAlchemy's metadata
 from alembic import context
-
-import app.db.models # Import models to ensure they are registered with SQLAlchemy's metadata
 from app.core.config import settings
 from app.db.database import Base
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

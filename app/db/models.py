@@ -5,8 +5,8 @@ from datetime import UTC, datetime
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.database import Base
 from app.core.config import settings
+from app.db.database import Base
 
 
 class User(Base):
@@ -39,6 +39,7 @@ class User(Base):
             # return f"https://{settings.s3_bucket_name}.s3.{settings.s3_region}.backblazeb2.com/profile_pics/{self.image_file}"
             return f"https://f004.backblazeb2.com/file/{settings.s3_bucket_name}/profile_pics/{self.image_file}"
         return "/static/profile_pics/default.jpg"
+
 
 class Post(Base):
     __tablename__ = "posts"

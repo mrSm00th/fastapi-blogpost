@@ -9,7 +9,12 @@ import app.db.models as models
 from app.core.auth import CurrentUser
 from app.core.config import settings
 from app.db.database import get_db
-from app.schemas.schemas import PaginatedPostsResponse, PostCreate, PostResponse, PostUpdate
+from app.schemas.schemas import (
+    PaginatedPostsResponse,
+    PostCreate,
+    PostResponse,
+    PostUpdate,
+)
 
 router = APIRouter()
 

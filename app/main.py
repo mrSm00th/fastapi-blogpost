@@ -1,4 +1,5 @@
 import asyncio
+
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 from contextlib import asynccontextmanager
@@ -12,7 +13,7 @@ from fastapi.exception_handlers import (
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -20,8 +21,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import app.db.models as models
 from app.core.config import settings
 from app.db.database import Base, engine, get_db
-from app.routers import posts
-from app.routers import users
+from app.routers import posts, users
 
 
 @asynccontextmanager

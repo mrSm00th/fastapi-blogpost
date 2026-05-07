@@ -10,7 +10,6 @@ without needing to go through the full application flow.
 from io import BytesIO
 
 from botocore.exceptions import BotoCoreError, ClientError
-
 from core.config import settings
 from services.image_utils import _get_s3_client
 

@@ -3,7 +3,8 @@ from httpx import AsyncClient
 
 from tests.conftest import auth_header, create_test_user, login_user
 
-#NOTE: pytest automatically matches a fixture with the same name as a parameter in the test function, so we don't need to explicitly pass them in, pytest will do it for us. For example, when we use "client" as a parameter in the test function, pytest will look for a fixture named "client" and use it. This allows us to easily reuse fixtures across multiple tests without having to manually pass them in each time.
+
+# NOTE: pytest automatically matches a fixture with the same name as a parameter in the test function, so we don't need to explicitly pass them in, pytest will do it for us. For example, when we use "client" as a parameter in the test function, pytest will look for a fixture named "client" and use it. This allows us to easily reuse fixtures across multiple tests without having to manually pass them in each time.
 ## Thats why client here is automatically matched by the pytest from conftest.py
 @pytest.mark.anyio
 async def test_get_posts_empty(client: AsyncClient):
@@ -59,7 +60,7 @@ async def test_create_post_unauthorized(client: AsyncClient):
 
 @pytest.mark.anyio
 async def test_update_post_success(client: AsyncClient):
-    #The below 3 lines creates a authenticated test user 
+    # The below 3 lines creates a authenticated test user
     await create_test_user(client)
     token = await login_user(client)
     headers = auth_header(token)
