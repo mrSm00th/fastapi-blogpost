@@ -1,8 +1,4 @@
 import asyncio
-
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-import asyncio
 from logging.config import fileConfig
 
 from sqlalchemy import pool

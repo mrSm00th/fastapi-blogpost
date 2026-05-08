@@ -34,10 +34,15 @@ class User(Base):
 
     @property
     def image_path(self) -> str:
-        if self.image_file:
-            #  return f"https://{settings.s3_bucket_name}.s3.{settings.s3_region}.amazonaws.com/profile_pics/{self.image_file}"
-            # return f"https://{settings.s3_bucket_name}.s3.{settings.s3_region}.backblazeb2.com/profile_pics/{self.image_file}"
-            return f"https://f004.backblazeb2.com/file/{settings.s3_bucket_name}/profile_pics/{self.image_file}"
+        if self.image_file and settings.s3_endpoint_url:
+            base_url = settings.s3_endpoint_url.replace("/storage/v1/s3", "")
+
+            return (
+                f"{base_url}/storage/v1/object/public/"
+                f"{settings.s3_bucket_name}/profile_pics/"
+                f"{self.image_file}"
+            )
+
         return "/static/profile_pics/default.jpg"
 
 

@@ -80,6 +80,473 @@ body {
     color: #e2e8f0;
     border: 1px solid rgba(255,255,255,0.05);
 }
+/* USER AVATAR */
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background:
+        linear-gradient(135deg,
+        var(--brand),
+        var(--accent));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+
+    box-shadow: 0 10px 25px rgba(124,58,237,0.25);
+}
+
+/* ABOUT ICON */
+.about-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(135deg,
+        rgba(124,58,237,0.15),
+        rgba(244,63,94,0.15));
+
+    font-size: 1.3rem;
+}
+
+/* ABOUT CARD */
+/* ABOUT + NAV CARDS */
+.about-card,
+.nav-card {
+    position: relative;
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(15,23,42,0.92),
+            rgba(2,6,23,0.88)
+        );
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.35);
+}
+
+/* GRADIENT ORB */
+.about-card::before,
+.nav-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -90px;
+    right: -90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(124,58,237,0.35),
+            rgba(244,63,94,0.15),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+/* SECOND GLOW */
+.about-card::after,
+.nav-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 140px;
+    height: 140px;
+
+    bottom: -70px;
+    left: -70px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(6,182,212,0.18),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+/* ICON */
+.about-icon {
+    width: 54px;
+    height: 54px;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,0.28),
+            rgba(244,63,94,0.20)
+        );
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    font-size: 1.4rem;
+
+    backdrop-filter: blur(10px);
+}
+
+/* NAV BUTTONS */
+.nav-btn {
+    position: relative;
+
+    border-radius: 14px !important;
+
+    border: 1px solid rgba(255,255,255,0.06) !important;
+
+    background:
+        rgba(255,255,255,0.03) !important;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+
+    overflow: hidden;
+}
+
+/* HOVER EFFECT */
+.nav-btn:hover {
+
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(124,58,237,0.45) !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,0.16),
+            rgba(244,63,94,0.10)
+        ) !important;
+}
+
+/* BUTTON SHINE */
+.nav-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.08),
+            transparent
+        );
+
+    transition: left 0.6s ease;
+}
+
+.nav-btn:hover::before {
+    left: 120%;
+}
+
+/* NAV BUTTONS */
+/* ABOUT + NAV CARDS */
+.about-card,
+.nav-card {
+    position: relative;
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(15,23,42,0.92),
+            rgba(2,6,23,0.88)
+        );
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.35);
+}
+
+/* GRADIENT ORB */
+.about-card::before,
+.nav-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -90px;
+    right: -90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(124,58,237,0.35),
+            rgba(244,63,94,0.15),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+/* SECOND GLOW */
+.about-card::after,
+.nav-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 140px;
+    height: 140px;
+
+    bottom: -70px;
+    left: -70px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(6,182,212,0.18),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+/* ICON */
+.about-icon {
+    width: 54px;
+    height: 54px;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,0.28),
+            rgba(244,63,94,0.20)
+        );
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    font-size: 1.4rem;
+
+    backdrop-filter: blur(10px);
+}
+
+/* NAV BUTTONS */
+.nav-btn {
+    position: relative;
+
+    border-radius: 14px !important;
+
+    border: 1px solid rgba(255,255,255,0.06) !important;
+
+    background:
+        rgba(255,255,255,0.03) !important;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+
+    overflow: hidden;
+}
+
+/* HOVER EFFECT */
+.nav-btn:hover {
+
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(124,58,237,0.45) !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,0.16),
+            rgba(244,63,94,0.10)
+        ) !important;
+}
+
+/* BUTTON SHINE */
+.nav-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.08),
+            transparent
+        );
+
+    transition: left 0.6s ease;
+}
+
+.nav-btn:hover::before {
+    left: 120%;
+}
+/* LOAD MORE BUTTON */
+.load-more-btn {
+
+    position: relative;
+
+    border: none;
+
+    padding: 0.9rem 1.6rem;
+
+    border-radius: 18px;
+
+    color: white;
+
+    font-weight: 600;
+    letter-spacing: 0.3px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,0.95),
+            rgba(244,63,94,0.88)
+        );
+
+    box-shadow:
+        0 10px 30px rgba(124,58,237,0.28);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+/* CYAN GLOW */
+.load-more-btn::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 1px;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.06),
+            rgba(6,182,212,0.08)
+        );
+
+    pointer-events: none;
+}
+
+/* SHIMMER */
+.load-more-btn::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.22),
+            transparent
+        );
+
+    transition: left 0.7s ease;
+}
+
+.load-more-btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 40px rgba(124,58,237,0.42);
+}
+
+.load-more-btn:hover::after {
+    left: 120%;
+}
+
+/* CLICK */
+.load-more-btn:active {
+    transform: scale(0.98);
+}
+
+/* DISABLED */
+.load-more-btn:disabled {
+
+    opacity: 0.7;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+}
 </style>
 
 </head>
@@ -152,10 +619,104 @@ Account
 </div>
 
 <div class="col-md-4">
-<div class="content-section p-3">
-<h4>Sidebar</h4>
-<p class="text-body-secondary">You can put any info here.</p>
-</div>
+
+    <!-- USER CARD -->
+    <div class="content-section p-4 mb-4">
+
+        <div class="d-flex align-items-center">
+
+            <div class="user-avatar me-3">
+                <span id="userInitial">G</span>
+            </div>
+
+            <div>
+                <h5 class="mb-0 fw-bold" id="sidebarUsername">
+                    Guest
+                </h5>
+
+                <small class="text-body-secondary">
+                    Share your thoughts with the world
+                </small>
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <!-- LOGGED IN -->
+        <div id="sidebarLoggedIn" class="d-none">
+            <button class="btn btn-primary w-100"
+                    data-bs-toggle="modal"
+                    data-bs-target="#createPostModal">
+                ✍️ Create New Post
+            </button>
+        </div>
+
+        <!-- LOGGED OUT -->
+        <div id="sidebarLoggedOut">
+            <a href="{{ url_for('login_page') }}"
+               class="btn btn-primary w-100">
+                Login to Start Posting
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ABOUT -->
+    <div class="content-section p-4 mb-4 about-card">
+
+        <div class="d-flex align-items-center mb-3">
+            <div class="about-icon me-3">
+                🚀
+            </div>
+
+            <div>
+                <h5 class="mb-0 fw-bold">
+                    About blogpost
+                </h5>
+
+                <small class="text-body-secondary">
+                    Simple. Fast. Modern.
+                </small>
+            </div>
+        </div>
+
+        <p class="mb-0 text-body-secondary">
+            Built with FastAPI, JWT authentication,
+            and Bootstrap 5 — a lightweight blogging
+            platform focused on clean writing and simplicity.
+        </p>
+
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="content-section nav-card p-4">
+
+        <h5 class="fw-bold mb-3">
+            Navigation
+        </h5>
+
+        <div class="d-grid gap-2">
+
+            <a href="{{ url_for('home') }}"
+               class="btn btn-outline-secondary nav-btn">
+                🏠 Home Feed
+            </a>
+
+            <a href="{{ url_for('account_page') }}"
+               class="btn btn-outline-secondary nav-btn">
+                👤 Account
+            </a>
+
+            <a href="{{ url_for('register_page') }}"
+               class="btn btn-outline-secondary nav-btn">
+                ✨ Create Account
+            </a>
+
+        </div>
+
+    </div>
+
 </div>
 
 </div>
@@ -259,17 +820,73 @@ setTheme(localStorage.getItem('theme') || 'auto');
 import { getCurrentUser, getToken } from '/static/js/auth.js';
 import { showModal, hideModal, getErrorMessage } from '/static/js/utils.js';
 
+// async function updateUI() {
+//     const user = await getCurrentUser();
+//     if (user) {
+//         loggedInNav.classList.remove('d-none');
+//         loggedOutNav.classList.add('d-none');
+//         accountBtn.textContent = user.username;
+//     } else {
+//         loggedInNav.classList.add('d-none');
+//         loggedOutNav.classList.remove('d-none');
+//     }
+// }
+// updateUI();
 async function updateUI() {
+
     const user = await getCurrentUser();
+
+    const loggedInNav =
+        document.getElementById("loggedInNav");
+
+    const loggedOutNav =
+        document.getElementById("loggedOutNav");
+
+    const accountBtn =
+        document.getElementById("accountBtn");
+
+    const sidebarUsername =
+        document.getElementById("sidebarUsername");
+
+    const userInitial =
+        document.getElementById("userInitial");
+
+    const sidebarLoggedIn =
+        document.getElementById("sidebarLoggedIn");
+
+    const sidebarLoggedOut =
+        document.getElementById("sidebarLoggedOut");
+
     if (user) {
-        loggedInNav.classList.remove('d-none');
-        loggedOutNav.classList.add('d-none');
+
+        loggedInNav.classList.remove("d-none");
+        loggedOutNav.classList.add("d-none");
+
         accountBtn.textContent = user.username;
+
+        sidebarUsername.textContent =
+            user.username;
+
+        userInitial.textContent =
+            user.username.charAt(0).toUpperCase();
+
+        sidebarLoggedIn.classList.remove("d-none");
+        sidebarLoggedOut.classList.add("d-none");
+
     } else {
-        loggedInNav.classList.add('d-none');
-        loggedOutNav.classList.remove('d-none');
+
+        loggedInNav.classList.add("d-none");
+        loggedOutNav.classList.remove("d-none");
+
+        sidebarUsername.textContent = "Guest";
+
+        userInitial.textContent = "G";
+
+        sidebarLoggedIn.classList.add("d-none");
+        sidebarLoggedOut.classList.remove("d-none");
     }
 }
+
 updateUI();
 
 const form = document.getElementById("createPostForm");

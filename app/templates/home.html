@@ -28,7 +28,9 @@
     </div>
     {% if has_more %}
         <div class="text-center mb-4">
-            <button type="button" class="btn btn-outline-primary" id="loadMoreBtn">Load More Posts</button>
+            <button type="button" class="load-more-btn" id="loadMoreBtn">
+              <span class="btn-text">Load More Posts</span>
+          </button>
         </div>
     {% endif %}
 {% endblock content %}
@@ -69,7 +71,8 @@
   async function loadMorePosts() {
     // Disable button and show loading state
     loadMoreBtn.disabled = true;
-    loadMoreBtn.textContent = 'Loading...';
+    loadMoreBtn.innerHTML =
+  '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
 
     let errorOccurred = false;
 
@@ -99,13 +102,15 @@
       errorOccurred = true;
       console.error('Error loading posts:', error);
       // Show error message and keep button enabled for retry
-      loadMoreBtn.textContent = 'Error - Click to Retry';
+      loadMoreBtn.innerHTML =
+        '⚠️ Error — Click to Retry';
       loadMoreBtn.disabled = false;
     } finally {
       // Re-enable button and reset text only if no error occurred
       if (!errorOccurred && hasMore) {
         loadMoreBtn.disabled = false;
-        loadMoreBtn.textContent = 'Load More Posts';
+        loadMoreBtn.innerHTML =
+          '<span  span class="btn-text">Load More Posts</span>';
       }
     }
   }
