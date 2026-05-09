@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -8,6 +8,7 @@ from sqlalchemy.orm import selectinload
 import app.db.models as models
 from app.core.auth import CurrentUser
 from app.core.config import settings
+from app.core.limiter import limiter
 from app.db.database import get_db
 from app.schemas.schemas import (
     PaginatedPostsResponse,
@@ -20,10 +21,12 @@ router = APIRouter()
 
 
 @router.get("", response_model=PaginatedPostsResponse)
+@limiter.limit("20/minute")
 async def get_posts(
+    request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
     skip: Annotated[int, Query(ge=0)] = 0,
-    limit: Annotated[int, Query(ge=1, le=100)] = settings.posts_per_page,
+    limit: Annotated[int, Query(ge=1, le=10)] = settings.posts_per_page,
 ):
 
     count_result = await db.execute(select(func.count()).select_from(models.Post))
@@ -54,7 +57,9 @@ async def get_posts(
     response_model=PostResponse,
     status_code=status.HTTP_201_CREATED,
 )
+@limiter.limit("3/10minute")
 async def create_post(
+    request: Request,
     post: PostCreate,
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -71,7 +76,12 @@ async def create_post(
 
 
 @router.get("/{post_id}", response_model=PostResponse)
-async def get_post(post_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
+@limiter.limit("10/minute")
+async def get_post(
+    request: Request,
+    post_id: Annotated[int, Path(gt=0)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
     result = await db.execute(
         select(models.Post)
         .options(selectinload(models.Post.author))
@@ -84,8 +94,10 @@ async def get_post(post_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
 
 
 @router.put("/{post_id}", response_model=PostResponse)
+@limiter.limit("10/hour")
 async def update_post_full(
-    post_id: int,
+    request: Request,
+    post_id: Annotated[int, Path(gt=0)],
     post_data: PostCreate,
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -113,8 +125,10 @@ async def update_post_full(
 
 
 @router.patch("/{post_id}", response_model=PostResponse)
+@limiter.limit("10/hour")
 async def update_post_partial(
-    post_id: int,
+    request: Request,
+    post_id: Annotated[int, Path(gt=0)],
     post_data: PostUpdate,
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -143,8 +157,10 @@ async def update_post_partial(
 
 
 @router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("5/hour")
 async def delete_post(
-    post_id: int,
+    request: Request,
+    post_id: Annotated[int, Path(gt=0)],
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):

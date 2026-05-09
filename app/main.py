@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, Request, status
+from fastapi import Depends, FastAPI, HTTPException, Path as ApiPath, Request, status
 from fastapi.exception_handlers import (
     http_exception_handler,
     request_validation_exception_handler,
@@ -10,6 +10,9 @@ from fastapi.exception_handlers import (
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -17,21 +20,35 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 import app.db.models as models
 from app.core.config import settings
-from app.db.database import Base, engine, get_db
+from app.core.limiter import limiter
+from app.db.database import engine, get_db
 from app.routers import posts, users
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Startup
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     yield
+
     # Shutdown
     await engine.dispose()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
+
+app.state.limiter = limiter
+
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler,
+)
+
+app.add_middleware(SlowAPIMiddleware)
 
 BASE_DIR = Path(__file__).resolve().parent.parent  # /app/app → /app
 
@@ -63,7 +80,8 @@ async def add_security_headers(request: Request, call_next):
 
 
 @app.get("/health")
-async def health_check(db: Annotated[AsyncSession, Depends(get_db)]):
+@limiter.limit("2/minute")
+async def health_check(request: Request, db: Annotated[AsyncSession, Depends(get_db)]):
     try:
         await db.execute(text("SELECT 1"))
     except Exception as exc:
@@ -76,6 +94,7 @@ async def health_check(db: Annotated[AsyncSession, Depends(get_db)]):
 
 @app.get("/", include_in_schema=False, name="home")
 @app.get("/posts", include_in_schema=False, name="posts")
+@limiter.limit("15/minute")
 async def home(request: Request, db: Annotated[AsyncSession, Depends(get_db)]):
     count_result = await db.execute(select(func.count()).select_from(models.Post))
     total = count_result.scalar() or 0
@@ -103,9 +122,10 @@ async def home(request: Request, db: Annotated[AsyncSession, Depends(get_db)]):
 
 
 @app.get("/posts/{post_id}", include_in_schema=False)
+@limiter.limit("15/minute")
 async def post_page(
     request: Request,
-    post_id: int,
+    post_id: Annotated[int, ApiPath(gt=0)],
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
     result = await db.execute(
@@ -125,9 +145,10 @@ async def post_page(
 
 
 @app.get("/users/{user_id}/posts", include_in_schema=False, name="user_posts")
+@limiter.limit("10/minute")
 async def user_posts_page(
     request: Request,
-    user_id: int,
+    user_id: Annotated[int, ApiPath(gt=0)],
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
     result = await db.execute(select(models.User).where(models.User.id == user_id))
@@ -170,6 +191,7 @@ async def user_posts_page(
 
 
 @app.get("/login", include_in_schema=False)
+@limiter.limit("5/minute")
 async def login_page(request: Request):
     return templates.TemplateResponse(
         request,
@@ -179,6 +201,7 @@ async def login_page(request: Request):
 
 
 @app.get("/register", include_in_schema=False)
+@limiter.limit("5/minute")
 async def register_page(request: Request):
     return templates.TemplateResponse(
         request,
@@ -188,6 +211,7 @@ async def register_page(request: Request):
 
 
 @app.get("/account", include_in_schema=False)
+@limiter.limit("5/minute")
 async def account_page(request: Request):
     return templates.TemplateResponse(
         request,
@@ -197,6 +221,7 @@ async def account_page(request: Request):
 
 
 @app.get("/forgot-password", include_in_schema=False)
+@limiter.limit("3/minute")
 async def forgot_password_page(request: Request):
     return templates.TemplateResponse(
         request,
@@ -206,6 +231,7 @@ async def forgot_password_page(request: Request):
 
 
 @app.get("/reset-password", include_in_schema=False)
+@limiter.limit("3/minute")
 async def reset_password_page(request: Request):
     response = templates.TemplateResponse(
         request,

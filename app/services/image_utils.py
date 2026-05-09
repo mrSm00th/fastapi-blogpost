@@ -7,6 +7,9 @@ from starlette.concurrency import run_in_threadpool
 
 from app.core.config import settings
 
+MAX_IMAGE_PIXELS = 20_000_000
+ALLOWED_FORMATS = {"JPEG", "PNG", "WEBP"}
+
 
 def _get_s3_client():
     return boto3.client(
@@ -27,10 +30,19 @@ def _get_s3_client():
 
 
 def process_profile_image(content: bytes) -> tuple[bytes, str]:
+    Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
+
     with Image.open(BytesIO(content)) as original:
+        if original.format not in ALLOWED_FORMATS:
+            raise ValueError("Unsupported image format")
+
         img = ImageOps.exif_transpose(original)
 
-        img = ImageOps.fit(img, (300, 300), method=Image.Resampling.LANCZOS)
+        img = ImageOps.fit(
+            img,
+            (300, 300),
+            method=Image.Resampling.LANCZOS,
+        )
 
         if img.mode in ("RGBA", "LA", "P"):
             img = img.convert("RGB")
@@ -38,7 +50,14 @@ def process_profile_image(content: bytes) -> tuple[bytes, str]:
         filename = f"{uuid.uuid4().hex}.jpg"
 
         output = BytesIO()
-        img.save(output, "JPEG", quality=85, optimize=True)
+
+        img.save(
+            output,
+            "JPEG",
+            quality=85,
+            optimize=True,
+        )
+
         output.seek(0)
 
     return output.read(), filename
@@ -50,7 +69,10 @@ def _upload_to_s3(file_bytes: bytes, key: str) -> None:
         BytesIO(file_bytes),
         settings.s3_bucket_name,
         key,
-        ExtraArgs={"ContentType": "image/jpeg"},
+        ExtraArgs={
+            "ContentType": "image/jpeg",
+            "CacheControl": "max-age=31536000",
+        },
     )
 
 

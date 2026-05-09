@@ -36,8 +36,10 @@ class Token(BaseModel):
 
 
 class PostBase(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     title: str = Field(min_length=1, max_length=100)
-    content: str = Field(min_length=1)
+    content: str = Field(min_length=1, max_length=2500)
 
 
 class PostCreate(PostBase):
@@ -45,8 +47,10 @@ class PostCreate(PostBase):
 
 
 class PostUpdate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     title: str | None = Field(default=None, min_length=1, max_length=100)
-    content: str | None = Field(default=None, min_length=1)
+    content: str | None = Field(default=None, min_length=1, max_length=2500)
 
 
 class PostResponse(PostBase):

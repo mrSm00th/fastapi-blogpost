@@ -107,10 +107,25 @@ a.article-title:focus {
 }
 
 .article-content {
-  white-space: pre-line;
-  font-size: 1.25rem;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: 1rem;
+  margin-bottom: 0;
 }
 
+.preview-content {
+  line-height: 1.5;
+  height: 6em;
+  overflow: hidden;
+}
+.content-section h2 {
+  margin-bottom: 0.4rem;
+}
+
+.article-content {
+  margin-top: 0;
+}
 .article-img {
   height: var(--article-img-size);
   width: var(--article-img-size);

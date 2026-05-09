@@ -21,7 +21,7 @@
                             <a class="article-title"
                                href="{{ url_for('post_page', post_id=post.id) }}">{{ post.title }}</a>
                         </h2>
-                        <p class="article-content">{{ post.content }}</p>
+                        <p class="article-content preview-content">{{ post.content[:250] }}{% if post.content|length > 250 %}... <a href="{{ url_for('post_page', post_id=post.id) }}">Read more</a>{% endif %}</p>
                     </div>
                 </div>
             </article>
@@ -60,7 +60,17 @@
             <h2>
               <a class="article-title" href="/posts/${post.id}">${escapeHtml(post.title)}</a>
             </h2>
-            <p class="article-content">${escapeHtml(post.content)}</p>
+            <p class="article-content preview-content">${
+              escapeHtml(
+                post.content.length > 250
+                  ? post.content.slice(0, 250)
+                  : post.content
+              )
+            }${
+              post.content.length > 250
+                ? `... <a href="/posts/${post.id}">Read more</a>`
+                : ''
+            }</p>
           </div>
         </div>
       </article>

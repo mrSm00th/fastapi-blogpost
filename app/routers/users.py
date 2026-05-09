@@ -7,7 +7,9 @@ from fastapi import (
     BackgroundTasks,
     Depends,
     HTTPException,
+    Path,
     Query,
+    Request,
     UploadFile,
     status,
 )
@@ -29,6 +31,7 @@ from app.core.auth import (
     verify_password,
 )
 from app.core.config import settings
+from app.core.limiter import limiter
 from app.db.database import get_db
 from app.schemas.schemas import (
     ChangePasswordRequest,
@@ -57,7 +60,8 @@ router = APIRouter()
     response_model=UserPrivate,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_user(user: UserCreate, db: Annotated[AsyncSession, Depends(get_db)]):
+@limiter.limit("3/hour")
+async def create_user(request: Request, user: UserCreate, db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(
         select(models.User).where(
             func.lower(models.User.username) == user.username.lower(),
@@ -92,7 +96,9 @@ async def create_user(user: UserCreate, db: Annotated[AsyncSession, Depends(get_
 
 
 @router.post("/token", response_model=Token)
+@limiter.limit("5/10minutes")
 async def login_for_access_token(
+    request: Request,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
@@ -129,7 +135,9 @@ async def get_current_user(current_user: CurrentUser):
 
 
 @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit("3/hour")
 async def forgot_password(
+    request: Request,
     request_data: ForgotPasswordRequest,
     background_tasks: BackgroundTasks,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -181,7 +189,9 @@ async def forgot_password(
 
 
 @router.post("/reset-password", status_code=status.HTTP_200_OK)
+@limiter.limit("3/hour")
 async def reset_password(
+    request: Request,
     request_data: ResetPasswordRequest,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
@@ -234,7 +244,9 @@ async def reset_password(
 
 
 @router.patch("/me/password", status_code=status.HTTP_200_OK)
+@limiter.limit("3/hour")
 async def change_password(
+    request: Request,
     password_data: ChangePasswordRequest,
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -258,7 +270,8 @@ async def change_password(
 
 
 @router.get("/{user_id}", response_model=UserPublic)
-async def get_user(user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
+@limiter.limit("15/minutes")
+async def get_user(request: Request, user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(select(models.User).where(models.User.id == user_id))
     user = result.scalars().first()
     if user:
@@ -267,7 +280,9 @@ async def get_user(user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
 
 
 @router.get("/{user_id}/posts", response_model=PaginatedPostsResponse)
+@limiter.limit("15/minutes")
 async def get_user_posts(
+    request: Request,
     user_id: int,
     db: Annotated[AsyncSession, Depends(get_db)],
     skip: Annotated[int, Query(ge=0)] = 0,
@@ -310,7 +325,9 @@ async def get_user_posts(
 
 
 @router.patch("/{user_id}", response_model=UserPrivate)
+@limiter.limit("5/hour")
 async def update_user(
+    request: Request,
     user_id: int,
     user_update: UserUpdate,
     current_user: CurrentUser,
@@ -371,7 +388,9 @@ async def update_user(
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("2/day")
 async def delete_user(
+    request: Request,
     user_id: int,
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -400,7 +419,9 @@ async def delete_user(
 
 
 @router.patch("/{user_id}/picture", response_model=UserPrivate)
+@limiter.limit("10/day")
 async def upload_profile_picture(
+    request: Request,
     user_id: int,
     file: UploadFile,
     current_user: CurrentUser,
@@ -452,7 +473,9 @@ async def upload_profile_picture(
 
 
 @router.delete("/{user_id}/picture", response_model=UserPrivate)
+@limiter.limit("5/day")
 async def delete_user_picture(
+    request: Request,
     user_id: int,
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],

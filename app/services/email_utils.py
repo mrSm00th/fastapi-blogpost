@@ -31,6 +31,7 @@ async def send_email(
         username=settings.mail_username or None,
         password=settings.mail_password.get_secret_value() or None,
         start_tls=settings.mail_use_tls,
+        timeout=10,
     )
 
     # NOTE : debugging SMTP issues - uncomment if you need to troubleshoot email sending problems
@@ -62,13 +63,13 @@ async def send_password_reset_email(to_email: str, username: str, token: str) ->
     template = templates.env.get_template("email/password_reset.html")
     html_content = template.render(reset_url=reset_url, username=username)
 
-    plain_text = f"""Hi { username },
+    plain_text = f"""Hi {username},
 
 We received a request to reset your password for your account.
 
 To proceed, please click the secure link below and follow the instructions:
 
-{ reset_url }
+{reset_url}
 
 For your security, this link will expire in 30 minutes.
 
