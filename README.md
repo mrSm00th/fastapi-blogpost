@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="YOUR_DEPLOYED_URL_HERE">
+  <a href="https://fastapi-blogpost-project.onrender.com">
     <img src="https://img.shields.io/badge/Live_Demo-Visit_App-EC4899?style=for-the-badge" />
   </a>
   &nbsp;
@@ -397,7 +397,7 @@ This project is licensed under the [MIT License](./LICENSE).
 | | |
 |-|-|
 | GitHub | [@mrSm00th](https://github.com/mrSm00th) |
-| Live Demo | [YOUR_DEPLOYED_URL](https://YOUR_DEPLOYED_URL) |
+| Live Demo | [https://fastapi-blogpost-project.onrender.com](https://fastapi-blogpost-project.onrender.com) |
 
 ---
 
